@@ -4,7 +4,8 @@ class Cards extends Component {
     constructor() {
         super();
         this.state = {
-            cards: []
+            playerDeck: [],
+            botDeck: []
         };
     }
 
@@ -31,7 +32,7 @@ class Cards extends Component {
                     playerCardsArray.push(card.code);
                 });
                 let playersCardsString = playerCardsArray.join(",");
-                console.log("playersCardsString :", playersCardsString);
+                // console.log("playersCardsString :", playersCardsString);
 
                 // Same for bot cards
                 let botCardsArray = [];
@@ -39,7 +40,45 @@ class Cards extends Component {
                     botCardsArray.push(card.code);
                 });
                 let botsCardsString = botCardsArray.join(",");
-                console.log("botsCardsString :", botsCardsString);
+                // console.log("botsCardsString :", botsCardsString);
+
+                // Create player pile
+                let playerPileName = "playerPile";
+                fetch("https://deckofcardsapi.com/api/deck/" + deck_id + "/pile/" + playerPileName + "/add/?cards=" + playersCardsString)
+                    .then(results => {
+                        return results.json();
+                    })
+                    .then(data => {
+                        // console.log("data :", data);
+
+                        // let playerCards = data.cards.map(card => {
+                        //     return (
+                        //         <div key={card.code}>
+                        //             <img src={card.images.png} alt="card" />
+                        //         </div>
+                        //     );
+                        // });
+                        // this.setState({ cards: playerCards });
+                    });
+
+                // Create bot pile
+                let botPileName = "botPile";
+                fetch("https://deckofcardsapi.com/api/deck/" + deck_id + "/pile/" + botPileName + "/add/?cards=" + botsCardsString)
+                    .then(results => {
+                        return results.json();
+                    })
+                    .then(data => {
+                        console.log("data :", data);
+
+                        // let botCards = data.cards.map(card => {
+                        //     return (
+                        //         <div key={card.code}>
+                        //             <img src={card.images.png} alt="card" />
+                        //         </div>
+                        //     );
+                        // });
+                        // this.setState({ cards: botCards });
+                    });
 
                 let cards = data.cards.map(card => {
                     return (
