@@ -9,7 +9,11 @@ class Cards extends Component {
     };
 
     componentDidMount() {
-        fetch("https://deckofcardsapi.com/api/deck/brcw3n0y2riq/draw/?count=2")
+        this.fetchData();
+    }
+
+    fetchData = () => {
+        fetch("https://deckofcardsapi.com/api/deck/kknckzvf8757/draw/?count=2")
             .then(results => {
                 return results.json()
             }).then(data => {
@@ -29,6 +33,7 @@ class Cards extends Component {
         return (
             <div>
                 {this.state.cards}
+                <button onClick={this.fetchData}>Show 2 more cards</button>
             </div>
         )
     }
