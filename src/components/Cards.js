@@ -9,18 +9,20 @@ class Cards extends Component {
     }
 
     componentDidMount() {
+        this.shuffle();
         this.fetchData();
     }
 
+    shuffle = () => {
+        fetch("https://deckofcardsapi.com/api/deck/9td6jw4agj8o/shuffle/");
+    };
+
     fetchData = () => {
-        fetch("https://deckofcardsapi.com/api/deck/new/draw/?count=52")
+        fetch("https://deckofcardsapi.com/api/deck/9td6jw4agj8o/draw/?count=52")
             .then(results => {
                 return results.json();
             })
             .then(data => {
-                const deck_id = data.deck_id;
-                // console.log(deck_id);
-
                 // Split deck into two piles for player and bot
                 let playerDeck = data.cards.slice(0, 26);
                 let botDeck = data.cards.slice(26, 52);
@@ -53,12 +55,7 @@ class Cards extends Component {
     };
 
     render() {
-        return (
-            <div>
-                {this.state.cards}
-                <button onClick={this.fetchData}>Show 2 more card</button>
-            </div>
-        );
+        return <div>{this.state.cards}</div>;
     }
 }
 
