@@ -24,6 +24,7 @@ class Cards extends Component {
                 return results.json();
             })
             .then(data => {
+                const deck_id = data.deck_id;
                 // Split deck into two piles for player and bot
                 let playerDeck = data.cards.slice(0, 26);
                 let botDeck = data.cards.slice(26, 52);
@@ -45,27 +46,42 @@ class Cards extends Component {
                 // console.log("botsCardsString :", botsCardsString);
 
                 // Create player pile
-                let playerPileName = "playerPile";
+                const playerPileName = "playerPile";
                 fetch("https://deckofcardsapi.com/api/deck/" + deck_id + "/pile/" + playerPileName + "/add/?cards=" + playersCardsString)
                     .then(results => {
                         return results.json();
                     })
-                    .then(data => {
-                        // console.log("data :", data);
 
-                        // let playerCards = data.cards.map(card => {
+                // Create bot pile
+                const botPileName = "botPile";
+                fetch("https://deckofcardsapi.com/api/deck/" + deck_id + "/pile/" + botPileName + "/add/?cards=" + botsCardsString)
+                    .then(results => {
+                        return results.json();
+                    })
+                    .then(data => {
+                        console.log("data :", data);
+                    });
+
+                // Listing player cards in piles
+                fetch("https://deckofcardsapi.com/api/deck/" + deck_id + "/pile/" + playerPileName + "/list")
+                    .then(results => {
+                        return results.json();
+                    })
+                    .then(data => {
+                        console.log("data :", data);
+
+                        // let playersCards = data.cards.map(card => {
                         //     return (
                         //         <div key={card.code}>
                         //             <img src={card.images.png} alt="card" />
                         //         </div>
                         //     );
                         // });
-                        // this.setState({ cards: playerCards });
+                        // this.setState({ cards: playersCards });
                     });
 
-                // Create bot pile
-                let botPileName = "botPile";
-                fetch("https://deckofcardsapi.com/api/deck/" + deck_id + "/pile/" + botPileName + "/add/?cards=" + botsCardsString)
+                // Listing bot cards in piles
+                fetch("https://deckofcardsapi.com/api/deck/" + deck_id + "/pile/" + botPileName + "/list")
                     .then(results => {
                         return results.json();
                     })
@@ -82,14 +98,14 @@ class Cards extends Component {
                         // this.setState({ cards: botCards });
                     });
 
-                let cards = data.cards.map(card => {
-                    return (
-                        <div key={card.code}>
-                            <img src={card.images.png} alt="card" />
-                        </div>
-                    );
-                });
-                this.setState({ cards: cards });
+                // let cards = data.cards.map(card => {
+                //     return (
+                //         <div key={card.code}>
+                //             <img src={card.images.png} alt="card" />
+                //         </div>
+                //     );
+                // });
+                // this.setState({ cards: cards });
             });
     };
 
