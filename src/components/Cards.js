@@ -62,10 +62,25 @@ class Cards extends Component {
                         console.log("data :", data);
                     });
 
+
                 // Listing player cards in piles
-                fetch("https://deckofcardsapi.com/api/deck/" + deck_id + "/pile/" + playerPileName + "/list")
+                var playerObj = {
+                    link: "https://deckofcardsapi.com/api/deck/" + deck_id + "/pile/" + playerPileName + "/list",
+                    object: {
+                        method: 'GET',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Access-Control-Allow-Origin': '*',
+                            'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept, Authorization',
+                            'Access-Control-Allow-Credentials': 'true',
+                            'Access-Control-Allow-Methods': '*'
+                        }
+                    }
+                }
+
+                fetch(playerObj)
                     .then(results => {
-                        return results.json();
+                        return results;
                     })
                     .then(data => {
                         console.log("data :", data);
@@ -81,9 +96,23 @@ class Cards extends Component {
                     });
 
                 // Listing bot cards in piles
-                fetch("https://deckofcardsapi.com/api/deck/" + deck_id + "/pile/" + botPileName + "/list")
+                var botObj = {
+                    link: "https://deckofcardsapi.com/api/deck/" + deck_id + "/pile/" + botPileName + "/list",
+                    object: {
+                        method: 'GET',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Access-Control-Allow-Origin': '*',
+                            'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept, Authorization',
+                            'Access-Control-Allow-Credentials': 'true',
+                            'Access-Control-Allow-Methods': '*'
+                        }
+                    }
+                }
+
+                fetch(botObj)
                     .then(results => {
-                        return results.json();
+                        return results;
                     })
                     .then(data => {
                         console.log("data :", data);
