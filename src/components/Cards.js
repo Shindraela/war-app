@@ -12,6 +12,7 @@ class Cards extends Component {
     componentDidMount() {
         this.shuffle();
         this.fetchData();
+        this.fromPile();
     }
 
     shuffle = () => {
@@ -47,100 +48,118 @@ class Cards extends Component {
 
                 // Create player pile
                 const playerPileName = "playerPile";
-                fetch("https://deckofcardsapi.com/api/deck/" + deck_id + "/pile/" + playerPileName + "/add/?cards=" + playersCardsString)
-                    .then(results => {
-                        return results.json();
-                    })
+                fetch(
+                    "https://deckofcardsapi.com/api/deck/" +
+                        deck_id +
+                        "/pile/" +
+                        playerPileName +
+                        "/add/?cards=" +
+                        playersCardsString
+                ).then(results => {
+                    return results.json();
+                });
 
                 // Create bot pile
                 const botPileName = "botPile";
-                fetch("https://deckofcardsapi.com/api/deck/" + deck_id + "/pile/" + botPileName + "/add/?cards=" + botsCardsString)
+                fetch(
+                    "https://deckofcardsapi.com/api/deck/" +
+                        deck_id +
+                        "/pile/" +
+                        botPileName +
+                        "/add/?cards=" +
+                        botsCardsString
+                ).then(results => {
+                    return results.json();
+                });
+
+                // // Listing player cards in piles
+                // var playerObj = {
+                //     link: "https://deckofcardsapi.com/api/deck/" + deck_id + "/pile/" + playerPileName + "/list",
+                //     object: {
+                //         method: 'GET',
+                //         headers: {
+                //             'Content-Type': 'application/json',
+                //             'Access-Control-Allow-Origin': '*',
+                //             'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept, Authorization',
+                //             'Access-Control-Allow-Credentials': 'true',
+                //             'Access-Control-Allow-Methods': '*'
+                //         }
+                //     }
+                // }
+
+                fetch(
+                    "https://deckofcardsapi.com/api/deck/9td6jw4agj8o/pile/playerPile/list/"
+                )
                     .then(results => {
                         return results.json();
                     })
                     .then(data => {
-                        console.log("data :", data);
+                        console.log("playerPile list data :", data);
                     });
 
+                // // Listing bot cards in piles
+                // var botObj = {
+                //     link: "https://deckofcardsapi.com/api/deck/" + deck_id + "/pile/" + botPileName + "/list",
+                //     object: {
+                //         method: 'GET',
+                //         headers: {
+                //             'Content-Type': 'application/json',
+                //             'Access-Control-Allow-Origin': '*',
+                //             'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept, Authorization',
+                //             'Access-Control-Allow-Credentials': 'true',
+                //             'Access-Control-Allow-Methods': '*'
+                //         }
+                //     }
+                // }
 
-                // Listing player cards in piles
-                var playerObj = {
-                    link: "https://deckofcardsapi.com/api/deck/" + deck_id + "/pile/" + playerPileName + "/list",
-                    object: {
-                        method: 'GET',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'Access-Control-Allow-Origin': '*',
-                            'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept, Authorization',
-                            'Access-Control-Allow-Credentials': 'true',
-                            'Access-Control-Allow-Methods': '*'
-                        }
-                    }
-                }
-
-                fetch(playerObj)
+                fetch(
+                    "https://deckofcardsapi.com/api/deck/9td6jw4agj8o/pile/botPile/list/"
+                )
                     .then(results => {
-                        return results;
+                        return results.json();
                     })
                     .then(data => {
-                        console.log("data :", data);
-
-                        // let playersCards = data.cards.map(card => {
-                        //     return (
-                        //         <div key={card.code}>
-                        //             <img src={card.images.png} alt="card" />
-                        //         </div>
-                        //     );
-                        // });
-                        // this.setState({ cards: playersCards });
+                        console.log("botPile list data :", data);
                     });
+            });
+    };
 
-                // Listing bot cards in piles
-                var botObj = {
-                    link: "https://deckofcardsapi.com/api/deck/" + deck_id + "/pile/" + botPileName + "/list",
-                    object: {
-                        method: 'GET',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'Access-Control-Allow-Origin': '*',
-                            'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept, Authorization',
-                            'Access-Control-Allow-Credentials': 'true',
-                            'Access-Control-Allow-Methods': '*'
-                        }
-                    }
-                }
-
-                fetch(botObj)
-                    .then(results => {
-                        return results;
-                    })
-                    .then(data => {
-                        console.log("data :", data);
-
-                        // let botCards = data.cards.map(card => {
-                        //     return (
-                        //         <div key={card.code}>
-                        //             <img src={card.images.png} alt="card" />
-                        //         </div>
-                        //     );
-                        // });
-                        // this.setState({ cards: botCards });
-                    });
-
-                // let cards = data.cards.map(card => {
-                //     return (
-                //         <div key={card.code}>
-                //             <img src={card.images.png} alt="card" />
-                //         </div>
-                //     );
-                // });
-                // this.setState({ cards: cards });
+    fromPile = () => {
+        fetch(
+            "https://deckofcardsapi.com/api/deck/9td6jw4agj8o/pile/botPile/draw/?count=1"
+        )
+            .then(results => {
+                return results.json();
+            })
+            .then(data => {
+                console.log(data);
+                let botCards = data.cards.map(card => {
+                    return (
+                        <div key={card.code}>
+                            <img src={card.images.png} alt="card" />
+                        </div>
+                    );
+                });
+                this.setState({ cards: botCards });
             });
     };
 
     render() {
-        return <div>{this.state.cards}</div>;
+        return (
+            <div>
+                {this.state.cards}
+                <button onClick={this.fromPile}>Prochain tour</button>
+            </div>
+        );
     }
 }
 
-export default Cards;
+const App = () => {
+    return (
+        <div>
+            <Cards />
+        </div>
+    );
+};
+
+export default App;
